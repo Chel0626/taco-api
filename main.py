@@ -35,21 +35,28 @@ def read_root():
 def buscar_alimento(termo: str):
     resultados = []
     
-    for alimento in taco_data:
-        # Pega o nome do alimento no JSON (ajuste a chave se seu json usar "nome" em vez de "nome_busca")
-        nome_busca = alimento.get("nome_busca", alimento.get("nome", ""))
+    for item in taco_data:
+        # A chave correta para o nome é "description"
+        nome_busca = item.get("description", "")
         
-        # Se o termo digitado estiver no nome do alimento
         if termo.lower() in nome_busca.lower():
+            # Pegando os valores e garantindo que não sejam nulos
+            cho = float(item.get("carbohydrate_g") or 0)
+            ptn = float(item.get("protein_g") or 0)
+            lip = float(item.get("lipid_g") or 0)
+            kcal = float(item.get("energy_kcal") or 0)
+
             resultados.append({
-                "id": alimento.get("id", str(len(resultados))),
-                "nome_exibicao": alimento.get("nome_exibicao", nome_busca),
-                "cho": alimento.get("cho", 0),
-                "ptn": alimento.get("ptn", 0),
-                "lip": alimento.get("lip", 0)
+                "id": str(item.get("id", len(resultados))),
+                "nome_exibicao": nome_busca,
+                # Arredondando para 1 casa decimal para ficar bonito na UI
+                "cho": round(cho, 1),
+                "ptn": round(ptn, 1),
+                "lip": round(lip, 1),
+                "kcal": round(kcal, 1)
             })
             
-        # Limita a 15 resultados para não travar o front-end
+        # Limita a 15 resultados para o dropdown não ficar gigante
         if len(resultados) >= 15:
             break
             
