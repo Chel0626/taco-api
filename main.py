@@ -8,8 +8,10 @@ app = FastAPI()
 # Isso avisa ao servidor que ele pode aceitar requisições do seu localhost
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],  # Permite qualquer origem (localhost ou seu domínio final)
-    allow_credentials=True,
+    allow_origins=[
+        "http://localhost:3000",
+        "http://127.0.0.1:3000"
+    ],    allow_credentials=True,
     allow_methods=["*"],  # Permite GET, POST, etc.
     allow_headers=["*"],
 )
